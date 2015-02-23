@@ -1,0 +1,16 @@
+doctype html
+html(ng-app="parking")
+  head
+    title= title
+    meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1")
+    link(rel="stylesheet", href="/stylesheets/foundation.min.css")
+    link(rel="stylesheet", href="http://cdnjs.cloudflare.com/ajax/libs/ng-dialog/0.3.7/css/ngDialog.min.css")
+    link(rel="stylesheet", href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css")
+    link(rel="stylesheet", href="/stylesheets/parking.min.css")
+    link(rel="stylesheet", href="/stylesheets/modules.min.css")
+  body
+    div(class="off-canvas-wrap")
+        block header
+        block content
+    script(src='/javascripts/vendors/libraries.js')
+    script(src='/javascripts/all.min.js')

@@ -1,1 +1,2 @@
-# VP-parking-app
+# parking-app
+AngularJS App

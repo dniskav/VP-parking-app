@@ -1,0 +1,21 @@
+#login
+  form(name="loginForm", novalidate, ng-submit="loginForm.$valid && login.methods.submit()")
+    div(class="row")
+      div(class="small-8 small-centered medium-5 large-4 columns")
+        label Email:
+          input(type="email", class="radius", placeholder="enter email", required, ng-model="login.user.email")
+    div(class="row")
+      div(class="small-8 small-centered medium-5 large-4 columns")
+        label Password
+          input(type="password", class="radius", placeholder="enter password", required, ng-model="login.user.password")
+    div(class="row")
+      div(class="small-8 small-centered medium-5 large-4 columns")
+        div(class="row")
+          div(class="small-6 columns")
+            a(href="", class="button radius", ui-sref="home") Cancel
+          div(class="small-6 columns")
+            button(type="submit", class="button radius") Log in
+
+    div(class="row error")
+      div(class="small-8 small-centered medium-5 large-4 columns")
+        p(ng-show="login.errors.login") Please validate credentials
