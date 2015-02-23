@@ -1,0 +1,15 @@
+section(class="modal-container")
+  form(name="newUserForm", novalidate)
+    div(class="row")
+      label(class="small-6") Name   
+      input(class="small-6 radius", type="text", required, ng-model="name")
+    div(class="row")
+      label(class="small-6") Plate
+      input(class="small-6 radius", type="text", required, ng-model="plate")
+    div(class="row")
+      label(class="small-6") type       
+      select(class="small-6 radius", required, ng-model="type")
+        option Car
+        option Motorcycle
+    div(class="row")
+      button(class="button right", ng-click="saveNew()") Save
