@@ -60,6 +60,7 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
   factory.normalizePlate = function (plate){
     return plate.match(/[A-Za-z0-9]/gi).join('').toUpperCase();  
   };
+
   //Insert new vehicle
   factory.createUser = function (user) {
 
@@ -72,7 +73,15 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
       name: user.name
     };
 
-    factory.spots.push(newUser);
+    factory.setData(newUser)
+      .then(angular.bind(this, function (data) {
+        factory.spots.push(newUser);
+        console.log(data);
+      }),
+        function(err) {
+          alert('save fail!!!'); 
+        }
+      );
   };
 
   // Search plate
@@ -83,16 +92,44 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
     for(var ndx in factory.spots){
 
       var DbPlate = factory.normalizePlate(factory.spots[ndx].plate);
-      $log.info(DbPlate, plate);
       if (DbPlate === plate) return { position: ndx };
     };
     return false;
   };
+
   // Http Request to parking users object
   factory.getData = function () {
     var defer = $q.defer();
 
     $http.get(spotsUrl)
+      .success(function(data) {
+        defer.resolve(data);
+      })
+      .error(function() {
+        defer.reject();
+      });
+
+    return defer.promise;
+  };
+
+  factory.setData = function (user) {
+    var defer = $q.defer();
+
+    $http.post(spotsUrl, user)
+      .success(function(data) {
+        defer.resolve(data);
+      })
+      .error(function() {
+        defer.reject();
+      });
+
+    return defer.promise;
+  };
+
+  factory.editData = function (user) {
+    var defer = $q.defer();
+
+    $http.put(spotsUrl, user)
       .success(function(data) {
         defer.resolve(data);
       })

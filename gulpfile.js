@@ -16,13 +16,14 @@ var src = './src',
   minifyCSS = require('gulp-minify-css'),
   app = express(),
   livereload = require('gulp-livereload'),
+  port = 3000,
   tasks;
 
 tasks = {
   server: {
     start: function () {
       app.use(serve);
-      app.listen(3000);
+      app.listen(port);
     }
   },
   watch: function () {
@@ -122,7 +123,7 @@ gulp.task('build:parking', tasks.build.styles.parking);
 gulp.task('build:styles', tasks.build.styles.modules);
 
 /**
- * Server task
+ * Server start task
  */
 gulp.task('server', tasks.server.start);
 
