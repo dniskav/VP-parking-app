@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var mongoose = require('mongoose');
 
 // Hardcoded info for know, will be serve by db when defined.
 var users = [
