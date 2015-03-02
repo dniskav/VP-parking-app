@@ -1,7 +1,17 @@
 var express = require('express');
+var app = express();
 var router = express.Router();
 var mongoose = require('mongoose');
 
+mongoose.connect('mongodb://localhost/users', function (err, res) {
+  if (err) {
+    throw err;
+  }
+  console.log('Connected to Database');
+});
+
+var model = require('../models/users.model.js')(app, mongoose);
+var user = mongoose.model('userSchm');
 // Hardcoded info for know, will be serve by db when defined.
 var users = [
   { name : "Dale", plate : "KEY 285", type : "car", active : true, visible: true },
@@ -18,13 +28,13 @@ var users = [
 
 
 // Utilities
-var normalizePlate = function(plate) {
-  return plate.match(/[A-Za-z0-9]/gi).join('').toUpperCase();  
+var normalizePlate = function (plate) {
+  return plate.match(/[A-Za-z0-9]/gi).join('').toUpperCase();
 };
 
-var searchUser = function(id) {
+var searchUser = function (id) {
   var res = false;
-  users.forEach(function(item, ndx) {
+  users.forEach(function (item, ndx) {
     var plate = normalizePlate(id),
         rPlate = normalizePlate(item.plate);
 
@@ -37,16 +47,16 @@ var searchUser = function(id) {
 };
 
 /* GET home page. */
-router.get('/', function(req, res) {
+router.get('/', function (req, res) {
 
   // here get the data from DB
-  setTimeout(function(){
+  setTimeout(function (){
     res.jsonp(users);
   }, 500);
   
 });
 
-router.get('/:id', function(req, res) {
+router.get('/:id', function (req, res) {
   var ndx = searchUser(req.params.id),
   resp;
 
@@ -59,17 +69,27 @@ router.get('/:id', function(req, res) {
   
 });
 
-router.post('/', function(req, res) {
+router.post('/', function (req, res) {
 
   var data = req.body;
+  var newUser = new user({
+    name : data.name,
+    plate : normalizePlate(data.plate),
+    type : data.type,
+    active : false,
+    visible: false
+  });
+
+  console.log(newUser);
 
   // here save the data in DB
-  setTimeout(function(){
-    res.jsonp({user : data.name, plate : data.plate, saved : true});
-  }, 500);
+  newUser.save(function (err, resp) {
+    //if(err) return res.send(500, err.message);
+    res.jsonp({user: newUser, saved : true});
+  });
 });
 
-router.put('/:id', function(req, res) {
+router.put('/:id', function (req, res) {
 
   var data = req.body,
       ndx = searchUser(req.params.id);
@@ -83,7 +103,7 @@ router.put('/:id', function(req, res) {
 
   console.log(ndx, data, users[ndx]);
   // here save de data in DB
-  setTimeout(function(){
+  setTimeout(function (){
     res.jsonp(users);
   }, 500);
 });
