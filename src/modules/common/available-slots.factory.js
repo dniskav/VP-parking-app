@@ -72,6 +72,15 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
   };
 
   //Insert new vehicle
+  factory.removeUser = function (id) {
+    console.log(id);
+    factory.removeData(id)
+      .then(function (res) {
+        factory.drawSlots();
+        return res
+      });
+  };
+
   factory.createUser = function (user) {
 
     if (typeof factory.searchPlate(user.plate) === 'object') return;
@@ -152,10 +161,11 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
     return defer.promise;
   };
 
-  factory.removeData = function (user) {
-    var defer = $q.defer();
+  factory.removeData = function (id) {
+    var defer = $q.defer(),
+        url = spotsUrl + '/' + id;
 
-    $http.delete(spotsUrl, user)
+    $http.delete(url)
       .success(function(data) {
         defer.resolve(data);
       })

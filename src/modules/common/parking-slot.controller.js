@@ -21,6 +21,17 @@ common.controller('parkingSlotCtrl', function (SpotsService, SlotsFactory, $log,
     this.spots = SlotsFactory.spots;
   };
 
+  $scope.delete = function(id){
+    var msg = 'This acction is unrecoverable, are you sure????';
+
+    if(confirm(msg)) {
+      if(SlotsFactory.removeUser(id)) {
+        alert(id + ' Deleted!!!');
+      } else {
+        alert('somenthing happens, cannot delete user :/');
+      };
+    }
+  };
   $scope.edit = function(id){
     var usr = SlotsFactory.searchPlate(id);
     if(usr.position != '') {

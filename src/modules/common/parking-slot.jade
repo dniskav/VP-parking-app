@@ -6,7 +6,7 @@ table(class="row")
       th Type
       th Options
       th Active
-  tr(ng-repeat="slot in slots.spots | filter: data")
+  tr(ng-repeat="slot in slots.spots | filter: data", ng-if="slot.visible")
     td {{slot.name}}
     td {{slot.plate}}
     td
