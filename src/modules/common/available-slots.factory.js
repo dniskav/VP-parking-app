@@ -11,15 +11,19 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
 
   // Factory Init
   factory.init = function () {
-    this.getData(spotsUrl)
+    factory.drawSlots();
+  }
+
+  factory.drawSlots = function () {
+    this.getData()
       .then(angular.bind(this, function (data) {
         for(var ndx in data){
           data[ndx].plate = factory.normalizePlate(data[ndx].plate);
         }
         factory.spots = data;
         factory.setAvailableSlots();
-      }));
-  }
+      }));    
+  };
 
   // Available slots
   factory.setAvailableSlots = function () {
@@ -38,25 +42,31 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
   };
 
   factory.assignSlot = function (id) {
-    var str;
+    var usr,
+        user = {};
 
-    // plate = factory.normalizePlate(plate);
+    var assign = function(id, user) {
+      factory.editData(id, user)
+        .then(angular.bind(this, function (data) {
+          factory.drawSlots();
+        }),
+          function(err) {
+            alert('save fail!!!'); 
+          }
+        );
+    } ;   
 
-    for (var i = 0; i < factory.spots.length; i++) {
-      str = factory.spots[i]._id;
-
-      if (id == str) {
-          if (!factory.spots[i].active) {
-            factory.spots[i].active = true;
-          }else{
-            factory.spots[i].active = false;
-          };
-          factory.setAvailableSlots();
-      };
-    };
+    factory.getData(id)
+      .then(
+        angular.bind(this, function (data) {
+          usr = data;
+          user.active = !usr.active;
+          assign(id, user);
+        })
+      );
   };
-  // Format ID of vehicle
 
+  // Format plate of vehicle
   factory.normalizePlate = function (plate){
     return plate.match(/[A-Za-z0-9]/gi).join('').toUpperCase();  
   };
@@ -98,10 +108,11 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
   };
 
   // Http Request to parking users object
-  factory.getData = function () {
-    var defer = $q.defer();
+  factory.getData = function (id) {
+    var defer = $q.defer(),
+        url = (id)? spotsUrl + '/' + id : spotsUrl;
 
-    $http.get(spotsUrl)
+    $http.get(url)
       .success(function(data) {
         defer.resolve(data);
       })
@@ -112,7 +123,7 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
     return defer.promise;
   };
 
-  factory.setData = function (user) {
+  factory.setData = function (user, data) {
     var defer = $q.defer();
 
     $http.post(spotsUrl, user)
@@ -126,10 +137,25 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
     return defer.promise;
   };
 
-  factory.editData = function (user) {
+  factory.editData = function (user, data) {
+    var defer = $q.defer(),
+        url = spotsUrl + '/' + user;
+
+    $http.put(url, data)
+      .success(function(data) {
+        defer.resolve(data);
+      })
+      .error(function() {
+        defer.reject();
+      });
+
+    return defer.promise;
+  };
+
+  factory.removeData = function (user) {
     var defer = $q.defer();
 
-    $http.put(spotsUrl, user)
+    $http.delete(spotsUrl, user)
       .success(function(data) {
         defer.resolve(data);
       })

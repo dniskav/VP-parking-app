@@ -77,8 +77,8 @@ router.put('/:id', function (req, res) {
       user.name = data.name || user.name;
       user.plate = data.plate || user.plate;
       user.type = data.type || user.type;
-      user.active = data.active || user.active;
-      user.visible = data.visible || user.visible;
+      user.active = (typeof data.active != 'undefined')? data.active : user.active;
+      user.visible = (typeof data.visible != 'undefined')? data.visible : user.visible;
 
       user.save(function (err) {
         if (err) return res.send(500, err.message);
