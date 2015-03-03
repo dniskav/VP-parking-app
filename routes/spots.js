@@ -90,4 +90,17 @@ router.put('/:id', function (req, res) {
   };
 });
 
+/* DELETE by _id */
+router.delete('/:id', function (req, res) {
+  var data = req.body,
+      id = req.params.id;
+
+  crud.findById(id, function(err, user) {
+    user.remove(err, function () {
+      if (err) return res.send(500, err.message);
+    });
+    res.jsonp({user: id, deleted : true});        
+  });
+});
+
 module.exports = router;
