@@ -37,15 +37,15 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
     return availableSlots;
   };
 
-  factory.assignSlot = function (plate) {
+  factory.assignSlot = function (id) {
     var str;
 
-    plate = factory.normalizePlate(plate);
+    // plate = factory.normalizePlate(plate);
 
     for (var i = 0; i < factory.spots.length; i++) {
-      str = factory.normalizePlate(factory.spots[i].plate);
+      str = factory.spots[i]._id;
 
-      if (plate == str) {
+      if (id == str) {
           if (!factory.spots[i].active) {
             factory.spots[i].active = true;
           }else{

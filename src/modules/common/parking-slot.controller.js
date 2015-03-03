@@ -16,8 +16,8 @@ common.controller('parkingSlotCtrl', function (SpotsService, SlotsFactory, $log,
   }));
 
 
-  this.assignSlot = function (plate) {
-   SlotsFactory.assignSlot(plate);
+  this.assignSlot = function (id) {
+   SlotsFactory.assignSlot(id);
     this.spots = SlotsFactory.spots;
   };
 

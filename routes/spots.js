@@ -1,9 +1,9 @@
 var express = require('express');
-var app = express();
 var router = express.Router();
 var mongoose = require('mongoose');
+var app = express();
 
-mongoose.connect('mongodb://localhost/users', function (err, res) {
+mongoose.connect('mongodb://localhost/users', function (err) {
   if (err) {
     throw err;
   }
@@ -11,68 +11,43 @@ mongoose.connect('mongodb://localhost/users', function (err, res) {
 });
 
 var model = require('../models/users.model.js')(app, mongoose);
-var user = mongoose.model('userSchm');
-// Hardcoded info for know, will be serve by db when defined.
-var users = [
-  { name : "Dale", plate : "KEY 285", type : "car", active : true, visible: true },
-  { name : "Scrooge", plate : "MOE 231", type : "motorcycle", active : false, visible: true },
-  { name : "Mickey", plate : "MOE 613", type : "car", active : true, visible: true },
-  { name : "Donal", plate : "XWQ 673", type : "motorcycle", active : true, visible: true },
-  { name : "Goofy", plate : "QED 864", type : "car", active : true, visible: true },
-  { name : "Minnie", plate : "VCX 123", type : "car", active : true, visible: true },
-  { name : "Daffy", plate : "IHG 422", type : "car", active : false, visible: true },
-  { name : "Pluto", plate : "UJB 664", type : "car", active : true, visible: true },
-  { name : "Chip", plate : "FDF 814", type : "motorcycle", active : true, visible: true },
-  { name : "John", plate : "CAF 253", type : "motorcycle", active : true, visible : true}
-];
-
+var crud = mongoose.model('userSchm');
 
 // Utilities
 var normalizePlate = function (plate) {
   return plate.match(/[A-Za-z0-9]/gi).join('').toUpperCase();
 };
 
-var searchUser = function (id) {
-  var res = false;
-  users.forEach(function (item, ndx) {
-    var plate = normalizePlate(id),
-        rPlate = normalizePlate(item.plate);
-
-    if(rPlate === plate) {
-      res = ndx;
-    }
-
-  });
-  return res;
-};
-
-/* GET home page. */
+/* GET */
 router.get('/', function (req, res) {
-
   // here get the data from DB
-  setTimeout(function (){
+  crud.find(function (err, users) {
+    if (err) {
+      return res.send(500, err.message);
+    }
     res.jsonp(users);
-  }, 500);
-  
+  });
+
 });
 
+/* GET by _id*/
 router.get('/:id', function (req, res) {
-  var ndx = searchUser(req.params.id),
+  var id = req.params.id,
   resp;
 
-  console.log(ndx, searchUser(req.params.id));
-  resp = (ndx !== false)? users[ndx] : {error: 'User ' + req.params.id + ' not found!'}
-
-  // here get the data from DB
-
-  res.jsonp(resp);
-  
+  crud.findById(id, function (err, user) {
+    if (err) {
+      return res.send(500, err.message);
+    };
+    res.jsonp(user);    
+  });  
 });
 
+/* POST */
 router.post('/', function (req, res) {
-
   var data = req.body;
-  var newUser = new user({
+  // build the object to save in the database
+  var newUser = new crud({
     name : data.name,
     plate : normalizePlate(data.plate),
     type : data.type,
@@ -80,33 +55,39 @@ router.post('/', function (req, res) {
     visible: false
   });
 
-  console.log(newUser);
-
   // here save the data in DB
   newUser.save(function (err, resp) {
-    //if(err) return res.send(500, err.message);
+    if (err) {
+      return res.send(500, err.message);
+    };
     res.jsonp({user: newUser, saved : true});
   });
 });
 
+/* PUT by _id */
 router.put('/:id', function (req, res) {
-
   var data = req.body,
-      ndx = searchUser(req.params.id);
-
-  if(ndx !== false) {
-    // here id the DB consult to get the users
-    users[ndx].name = data.name;
-    users[ndx].plate = data.plate;
-    users[ndx].type = data.type;
+      id = req.params.id;
+  if (data.plate) {
+    data.plate = normalizePlate(data.plate);
   }
 
-  console.log(ndx, data, users[ndx]);
-  // here save de data in DB
-  setTimeout(function (){
-    res.jsonp(users);
-  }, 500);
-});
+  if (id !== false && req.body) {
+    crud.findById(id, function(err, user) {
+      user.name = data.name || user.name;
+      user.plate = data.plate || user.plate;
+      user.type = data.type || user.type;
+      user.active = data.active || user.active;
+      user.visible = data.visible || user.visible;
 
+      user.save(function (err) {
+        if (err) return res.send(500, err.message);
+        res.jsonp({user: id, saved : true});
+      });
+    });
+  } else {
+    res.jsonp({error: "User not found"});
+  };
+});
 
 module.exports = router;
