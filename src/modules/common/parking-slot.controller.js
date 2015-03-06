@@ -15,12 +15,12 @@ common.controller('parkingSlotCtrl', function (SpotsService, SlotsFactory, $log,
     this.spots = newvalue;
   }));
 
-
+  // Assign a slot tu user
   this.assignSlot = function (id) {
    SlotsFactory.assignSlot(id);
     this.spots = SlotsFactory.spots;
   };
-
+  // Delete user
   $scope.delete = function(id){
     var msg = 'This acction is unrecoverable, are you sure????';
 
@@ -28,12 +28,15 @@ common.controller('parkingSlotCtrl', function (SpotsService, SlotsFactory, $log,
       if(SlotsFactory.removeUser(id)) {
         alert(id + ' Deleted!!!');
       } else {
-        alert('somenthing happens, cannot delete user :/');
+        // alert('somenthing happens, cannot delete user :/');
       };
     }
   };
+  // Edit user
   $scope.edit = function(id){
     var usr = SlotsFactory.searchPlate(id);
+    $scope.editUsrId = id;
+
     if(usr.position != '') {
       // launch the modal window
       ngDialog.open({ 
@@ -45,6 +48,5 @@ common.controller('parkingSlotCtrl', function (SpotsService, SlotsFactory, $log,
     } else {
       alert('user not found!');
     }
-    console.info(usr);
   }
 });

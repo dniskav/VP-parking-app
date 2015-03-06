@@ -47,12 +47,13 @@ router.get('/:id', function (req, res) {
 router.post('/', function (req, res) {
   var data = req.body;
   // build the object to save in the database
+  console.warn(data);
   var newUser = new crud({
     name : data.name,
     plate : normalizePlate(data.plate),
-    type : data.type,
-    active : false,
-    visible: false
+    type : data.type.toLowerCase(),
+    active : data.active,
+    visible: data.visible
   });
 
   // here save the data in DB
@@ -71,12 +72,15 @@ router.put('/:id', function (req, res) {
   if (data.plate) {
     data.plate = normalizePlate(data.plate);
   }
+  if (data.type) {
+    data.plate = data.plate.toLowerCase();
+  }
 
   if (id !== false && req.body) {
     crud.findById(id, function(err, user) {
       user.name = data.name || user.name;
       user.plate = data.plate || user.plate;
-      user.type = data.type || user.type;
+      user.type = data.type || user.type.toLowerCase();
       user.active = (typeof data.active != 'undefined')? data.active : user.active;
       user.visible = (typeof data.visible != 'undefined')? data.visible : user.visible;
 

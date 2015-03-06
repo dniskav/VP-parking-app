@@ -45,7 +45,7 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
     var usr,
         user = {};
 
-    var assign = function(id, user) {
+    var assign = function() {
       factory.editData(id, user)
         .then(angular.bind(this, function (data) {
           factory.drawSlots();
@@ -61,7 +61,7 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
         angular.bind(this, function (data) {
           usr = data;
           user.active = !usr.active;
-          assign(id, user);
+          assign();
         })
       );
   };
@@ -83,20 +83,42 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
 
   factory.createUser = function (user) {
 
-    if (typeof factory.searchPlate(user.plate) === 'object') return;
+    // if (typeof factory.searchPlate(user.plate) === 'object') return;
     
-    var newUser = {
-      active: false,
-      type: user.type.toLowerCase(),
-      plate: factory.normalizePlate(user.plate),
-      name: user.name
-    };
+    // var newUser = {
+    //   active: false,
+    //   type: user.type.toLowerCase(),
+    //   plate: factory.normalizePlate(user.plate),
+    //   name: user.name
+    // };
 
-    factory.setData(newUser)
-      .then(angular.bind(this, function (data) {
-        factory.spots.push(newUser);
-        console.log(data);
-      }),
+    factory.setData(user)
+      .then(
+        function (data) {
+          factory.drawSlots();
+        },
+        function(err) {
+          alert('save fail!!!'); 
+        }
+      );
+  };
+
+  factory.editUser = function (user, data) {
+
+    // if (typeof factory.searchPlate(user.plate) === 'object') return;
+    
+    // var newUser = {
+    //   active: false,
+    //   type: user.type.toLowerCase(),
+    //   plate: factory.normalizePlate(user.plate),
+    //   name: user.name
+    // };
+
+    factory.editData(user, data)
+      .then(
+        function (data) {
+          factory.drawSlots();
+        },
         function(err) {
           alert('save fail!!!'); 
         }
@@ -132,8 +154,10 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
     return defer.promise;
   };
 
-  factory.setData = function (user, data) {
+  factory.setData = function (user) {
     var defer = $q.defer();
+
+    console.log(user);
 
     $http.post(spotsUrl, user)
       .success(function(data) {
