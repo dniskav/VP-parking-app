@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var app = express();
+var dbName = "VPParkingApp";
 
-mongoose.connect('mongodb://localhost/users', function (err) {
+mongoose.connect('mongodb://localhost/' + dbName, function (err) {
   if (err) {
     throw err;
   }
@@ -11,7 +12,7 @@ mongoose.connect('mongodb://localhost/users', function (err) {
 });
 
 var model = require('../models/users.model.js')(app, mongoose);
-var crud = mongoose.model('userSchm');
+var crud = mongoose.model('vpusers');
 
 // Utilities
 var normalizePlate = function (plate) {

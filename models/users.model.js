@@ -9,4 +9,4 @@ var usersSchema = new Schema({
   visible: {type: Boolean}
 });
 
-module.exports = mongoose.model('userSchm', usersSchema);
+module.exports = mongoose.model('vpusers', usersSchema);
