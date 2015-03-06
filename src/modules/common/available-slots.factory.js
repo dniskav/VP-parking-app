@@ -11,15 +11,19 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
 
   // Factory Init
   factory.init = function () {
-    this.getData(spotsUrl)
+    factory.drawSlots();
+  }
+
+  factory.drawSlots = function () {
+    this.getData()
       .then(angular.bind(this, function (data) {
         for(var ndx in data){
           data[ndx].plate = factory.normalizePlate(data[ndx].plate);
         }
         factory.spots = data;
         factory.setAvailableSlots();
-      }));
-  }
+      }));    
+  };
 
   // Available slots
   factory.setAvailableSlots = function () {
@@ -37,42 +41,87 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
     return availableSlots;
   };
 
-  factory.assignSlot = function (plate) {
-    var str;
+  factory.assignSlot = function (id) {
+    var usr,
+        user = {};
 
-    plate = factory.normalizePlate(plate);
+    var assign = function() {
+      factory.editData(id, user)
+        .then(angular.bind(this, function (data) {
+          factory.drawSlots();
+        }),
+          function(err) {
+            alert('save fail!!!'); 
+          }
+        );
+    } ;   
 
-    for (var i = 0; i < factory.spots.length; i++) {
-      str = factory.normalizePlate(factory.spots[i].plate);
-
-      if (plate == str) {
-          if (!factory.spots[i].active) {
-            factory.spots[i].active = true;
-          }else{
-            factory.spots[i].active = false;
-          };
-          factory.setAvailableSlots();
-      };
-    };
+    factory.getData(id)
+      .then(
+        angular.bind(this, function (data) {
+          usr = data;
+          user.active = !usr.active;
+          assign();
+        })
+      );
   };
-  // Format ID of vehicle
 
+  // Format plate of vehicle
   factory.normalizePlate = function (plate){
     return plate.match(/[A-Za-z0-9]/gi).join('').toUpperCase();  
   };
+
   //Insert new vehicle
+  factory.removeUser = function (id) {
+    factory.removeData(id)
+      .then(function (res) {
+        factory.drawSlots();
+        return res
+      });
+  };
+
   factory.createUser = function (user) {
 
-    if (typeof factory.searchPlate(user.plate) === 'object') return;
+    // if (typeof factory.searchPlate(user.plate) === 'object') return;
     
-    var newUser = {
-      active: false,
-      type: user.type.toLowerCase(),
-      plate: factory.normalizePlate(user.plate),
-      name: user.name
-    };
+    // var newUser = {
+    //   active: false,
+    //   type: user.type.toLowerCase(),
+    //   plate: factory.normalizePlate(user.plate),
+    //   name: user.name
+    // };
 
-    factory.spots.push(newUser);
+    factory.setData(user)
+      .then(
+        function (data) {
+          factory.drawSlots();
+        },
+        function(err) {
+          alert('save fail!!!'); 
+        }
+      );
+  };
+
+  factory.editUser = function (user, data) {
+
+    // if (typeof factory.searchPlate(user.plate) === 'object') return;
+    
+    // var newUser = {
+    //   active: false,
+    //   type: user.type.toLowerCase(),
+    //   plate: factory.normalizePlate(user.plate),
+    //   name: user.name
+    // };
+
+    factory.editData(user, data)
+      .then(
+        function (data) {
+          factory.drawSlots();
+        },
+        function(err) {
+          alert('save fail!!!'); 
+        }
+      );
   };
 
   // Search plate
@@ -83,16 +132,63 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
     for(var ndx in factory.spots){
 
       var DbPlate = factory.normalizePlate(factory.spots[ndx].plate);
-      $log.info(DbPlate, plate);
       if (DbPlate === plate) return { position: ndx };
     };
     return false;
   };
+
   // Http Request to parking users object
-  factory.getData = function () {
+  factory.getData = function (id) {
+    var defer = $q.defer(),
+        url = (id)? spotsUrl + '/' + id : spotsUrl;
+
+    $http.get(url)
+      .success(function(data) {
+        defer.resolve(data);
+      })
+      .error(function() {
+        defer.reject();
+      });
+
+    return defer.promise;
+  };
+
+  factory.setData = function (user) {
     var defer = $q.defer();
 
-    $http.get(spotsUrl)
+    console.log(user);
+
+    $http.post(spotsUrl, user)
+      .success(function(data) {
+        defer.resolve(data);
+      })
+      .error(function() {
+        defer.reject();
+      });
+
+    return defer.promise;
+  };
+
+  factory.editData = function (user, data) {
+    var defer = $q.defer(),
+        url = spotsUrl + '/' + user;
+
+    $http.put(url, data)
+      .success(function(data) {
+        defer.resolve(data);
+      })
+      .error(function() {
+        defer.reject();
+      });
+
+    return defer.promise;
+  };
+
+  factory.removeData = function (id) {
+    var defer = $q.defer(),
+        url = spotsUrl + '/' + id;
+
+    $http.delete(url)
       .success(function(data) {
         defer.resolve(data);
       })

@@ -6,18 +6,18 @@ table(class="row")
       th Type
       th Options
       th Active
-  tr(ng-repeat="slot in slots.spots | filter: data")
+  tr(ng-repeat="slot in slots.spots | filter: data", ng-if="slot.visible")
     td {{slot.name}}
     td {{slot.plate}}
     td
-      i(class="fa fa-car fa-2x",ng-class="{'fa-motorcycle fa-2x': slot.type === 'motorcycle'}")
+      i(class="fa fa-car fa-2x",ng-class="{'fa-motorcycle fa-2x': slot.type === 'bike'}")
     td
       ul(class="button-group")
         li
-          a(class="fa fa-pencil large button success fa-2x", ng-click="edit")
+          a(class="fa fa-pencil large button success fa-2x", ng-click="edit(slot._id)")
         li
-          a(class="fa fa-trash large button alert fa-2x", ng-click="delete")
+          a(class="fa fa-trash large button alert fa-2x", ng-click="delete(slot._id)")
     td
       div(class="switch")
-        input(id="{{'switch-' + $index}}", type="checkbox", ng-click="slots.assignSlot(slot.plate)", ng-checked="slot.active")
+        input(id="{{'switch-' + $index}}", type="checkbox", ng-click="slots.assignSlot(slot._id)", ng-checked="slot.active")
         label(for="{{'switch-' + $index}}")
