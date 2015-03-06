@@ -73,7 +73,6 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
 
   //Insert new vehicle
   factory.removeUser = function (id) {
-    console.log(id);
     factory.removeData(id)
       .then(function (res) {
         factory.drawSlots();
