@@ -37,10 +37,19 @@ router.get('/:id', function (req, res) {
 router.post('/', function (req, res) {
   var data = req.body;
   // build the object to save in the database
+
+  if(checkData(data)) {
+    res.jsonp({error: "missing data"});
+    return;
+  }
+
   var newUser = new crud({
     name : data.name,
     plate : normalizePlate(data.plate),
     type : data.type.toLowerCase(),
+    email: data.email,
+    pwd: data.pwd,
+    role: data.role || 15,
     active : data.active,
     visible: data.visible
   });
@@ -53,6 +62,40 @@ router.post('/', function (req, res) {
     res.jsonp({user: newUser, saved : true});
   });
 });
+
+// check for empty data
+var checkData = function (obj) {
+  var res = false,
+      iExclude = {};
+  iExclude.items =[
+    'active',
+    'visible',
+    'role'
+  ];
+
+  iExclude.iSearch = function (item) {
+    var ndx = this.items.indexOf(item),
+        resp = false;
+
+    if (ndx > -1) {
+      resp = this.items[item];
+    }
+
+    return resp;
+  };
+
+  for(var prop in obj) {
+    var current = obj[prop];
+    if(iExclude.iSearch(prop)) continue;
+    if(current === "") {
+      if (!res) {
+        res = [];
+      }
+      res.push(prop);
+    }
+  };
+  return res;
+}
 
 /* PUT by _id */
 router.put('/:id', function (req, res) {
@@ -71,7 +114,10 @@ router.put('/:id', function (req, res) {
       user.plate = data.plate || user.plate;
       user.type = data.type || user.type.toLowerCase();
       user.active = (typeof data.active != 'undefined')? data.active : user.active;
-      user.visible = (typeof data.visible != 'undefined')? data.visible : user.visible;
+      user.visible = (typeof data.visible != 'undefined')? data.visible : user.visible,
+      user.email = data.email || user.email,
+      user.pwd = data.pwd || user.pwd,
+      user.role = data.role || 15;
 
       user.save(function (err) {
         if (err) return res.send(500, err.message);
