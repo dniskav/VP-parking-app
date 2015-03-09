@@ -5,6 +5,9 @@ var usersSchema = new Schema({
   name: {type: String},
   plate: {type: String},
   type: {type: String},
+  email: {type: String},
+  pwd: {type: String},
+  role: {type: Number},
   active: {type: Boolean},
   visible: {type: Boolean}
 });

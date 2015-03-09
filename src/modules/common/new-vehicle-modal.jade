@@ -4,6 +4,12 @@ section(class="modal-container")
       label(class="small-6") Name   
       input(class="small-6 radius", type="text", required, ng-model="editedUser.name")
     div(class="row")
+      label(class="small-6") email   
+      input(class="small-6 radius", type="email", required, ng-model="editedUser.email")
+    div(class="row")
+      label(class="small-6") Password   
+      input(class="small-6 radius", type="password", required, ng-model="editedUser.pwd")
+    div(class="row")
       label(class="small-6") Plate
       input(class="small-6 radius", type="text", required, ng-model="editedUser.plate")
     div(class="row")
@@ -11,6 +17,10 @@ section(class="modal-container")
         select(class="small-6 radius", required, ng-model="editedUser.type")
           option(value="car") Car
           option(value="bike") Motorcycle
+      label(class="small-3") Admin       
+        input(type="radio", value="0", name="role", ng-model="editedUser.role")
+      label(class="small-3") Employee       
+        input(type="radio", value="15", name="role", ng-model="editedUser.role")
       label(class="small-3") Active       
         input(type="checkbox", value="active", ng-model="editedUser.active")
       label(class="small-3") Visible      

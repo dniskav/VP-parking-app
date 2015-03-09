@@ -21,7 +21,8 @@
     "path": "^0.11.14",
     "serve-favicon": "~2.2.0",
     "stylus": "^0.49.3",
-    "zurb-foundation-5": "^5.4.7"
+    "zurb-foundation-5": "^5.4.7",
+    "cors": "~2.5.3"
   },
   "main": "parking.js",
   "author": "Benchs",

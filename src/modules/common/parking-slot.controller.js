@@ -3,7 +3,8 @@
 
 common.controller('parkingSlotCtrl', function (SpotsService, SlotsFactory, $log, $scope, ngDialog) {
   // Will hold parking spots info
-  this.spots = {};
+  this.spots = {},
+  this.auth = true;
 
   // Initialitation of SlotsFactory
   SlotsFactory.init();

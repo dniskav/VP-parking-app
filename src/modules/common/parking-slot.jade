@@ -11,12 +11,13 @@ table(class="row")
     td {{slot.plate}}
     td
       i(class="fa fa-car fa-2x",ng-class="{'fa-motorcycle fa-2x': slot.type === 'bike'}")
-    td
-      ul(class="button-group")
-        li
-          a(class="fa fa-pencil large button success fa-2x", ng-click="edit(slot._id)")
-        li
-          a(class="fa fa-trash large button alert fa-2x", ng-click="delete(slot._id)")
+    if true
+      td
+        ul(class="button-group")
+          li
+            a(class="fa fa-pencil large button success fa-2x", ng-click="edit(slot._id)")
+          li
+            a(class="fa fa-trash large button alert fa-2x", ng-click="delete(slot._id)")
     td
       div(class="switch")
         input(id="{{'switch-' + $index}}", type="checkbox", ng-click="slots.assignSlot(slot._id)", ng-checked="slot.active")
