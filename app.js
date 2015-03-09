@@ -8,6 +8,8 @@ var cors = require('cors');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var spots = require('./routes/spots');
+var auth = require('./routes/auth');
+
 
 var app = express();
 
@@ -26,6 +28,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
+app.use('/auth', auth);
 app.use('/users', users);
 app.use('/spots', spots);
 

@@ -1,18 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
+var crud = require('../data/db');
 var app = express();
-var dbName = "VPParkingApp";
-
-mongoose.connect('mongodb://localhost/' + dbName, function (err) {
-  if (err) {
-    throw err;
-  }
-  console.log('Connected to Database');
-});
-
-var model = require('../models/users.model.js')(app, mongoose);
-var crud = mongoose.model('vpusers');
 
 // Utilities
 var normalizePlate = function (plate) {
@@ -48,7 +37,6 @@ router.get('/:id', function (req, res) {
 router.post('/', function (req, res) {
   var data = req.body;
   // build the object to save in the database
-  console.warn(data);
   var newUser = new crud({
     name : data.name,
     plate : normalizePlate(data.plate),
