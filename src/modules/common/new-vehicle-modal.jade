@@ -18,7 +18,9 @@ section(class="modal-container")
           option(value="car") Car
           option(value="bike") Motorcycle
       label(class="small-3") Admin       
-        input(type="checkbox", value="0", ng-model="editedUser.role")
+        input(type="radio", value="0", name="role", ng-model="editedUser.role")
+      label(class="small-3") Employee       
+        input(type="radio", value="15", name="role", ng-model="editedUser.role")
       label(class="small-3") Active       
         input(type="checkbox", value="active", ng-model="editedUser.active")
       label(class="small-3") Visible      

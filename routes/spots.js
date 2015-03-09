@@ -57,7 +57,7 @@ router.post('/', function (req, res) {
   // here save the data in DB
   newUser.save(function (err, resp) {
     if (err) {
-      return res.send(500, err.message);
+      return res.status(status).send(500, err.message);
     };
     res.jsonp({user: newUser, saved : true});
   });
@@ -120,7 +120,7 @@ router.put('/:id', function (req, res) {
       user.role = data.role || 15;
 
       user.save(function (err) {
-        if (err) return res.send(500, err.message);
+        if (err) return res.status(status).send(500, err.message);
         res.jsonp({user: id, saved : true});
       });
     });
