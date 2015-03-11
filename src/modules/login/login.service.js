@@ -4,13 +4,28 @@
 /**
  * Service for validation of user credentials
  */
-login.service('LoginService', function LoginService($state, $cookieStore) {
+login.service('LoginService', function LoginService($state, $cookieStore, $q, $http) {
+  var loginUrl = '/auth';
+
   /**
    * Service that logs user
    */
-  this.login = function () {
+  this.userLogged = {};
+  this.login = function (credentials) {
+    var that = this;
     // This return statement will be replace with a service.
-    $cookieStore.put('session', 'parking user session');
+    // $cookieStore.put('session', 'parking user session');
+    this.checkData(credentials)
+      .then(
+        function (data) {
+          that.userLogged = data;
+          return data;
+        }, 
+        function (err) {
+          return false;
+        }
+      );
+
     return true;
   };
 
@@ -18,10 +33,8 @@ login.service('LoginService', function LoginService($state, $cookieStore) {
    * Service that validates if user is logged in
    */
   this.isLogged = function () {
-    var usrSession = $cookieStore.get('session');
-    // This return statement will be replace with a service.
-    if(usrSession) {
-      return true;
+    if(this.userLogged.token) {
+      return this.userLogged;
     }
     return false;
   };
@@ -39,4 +52,19 @@ login.service('LoginService', function LoginService($state, $cookieStore) {
       $log.error('The user doesn\'t wanna go...');
     };
   };
+
+  this.checkData = function (user) {
+    var defer = $q.defer();
+
+    $http.post(loginUrl, user)
+      .success(function(data) {
+        defer.resolve(data);
+      })
+      .error(function() {
+        defer.reject();
+      });
+
+    return defer.promise;
+  };
+
 });

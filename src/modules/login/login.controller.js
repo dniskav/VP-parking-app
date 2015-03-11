@@ -1,7 +1,7 @@
 // Login controller
 'use strict';
 
-login.controller('loginCtrl', function ($state, LoginService) {
+login.controller('loginCtrl', function ($state, LoginService, $scope) {
   this.user = {};
   this.methods = {};
   this.errors = {};
@@ -11,9 +11,12 @@ login.controller('loginCtrl', function ($state, LoginService) {
    * Cta for user submitting the login form
    */
   this.methods.submit = angular.bind(this, function () {
-    if(LoginService.login()) {
+    var user = $scope.login.user,
+        status = LoginService.login(user);
+
+    if(status) {
       this.errors.login = false
-      $state.go('home');
+      // $state.go('home');
     } else {
       this.errors.login = true
     }
