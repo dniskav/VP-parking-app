@@ -4,6 +4,16 @@ var crud = require('../data/db');
 var moment = require('moment');
 var tokenUtil = require('../auth/token');
 var validUntil = 60;
+var expired = 'token expired';
+var missingHeader = 'Missing headers';
+
+var validateHeaders = function (headers) {
+  if(headers.token) {
+    return true;
+  }
+  return false;
+}
+
 
 /* Manage the auth request */
 routerAuth.post('/', function(req, res) {
@@ -35,22 +45,29 @@ routerAuth.post('/', function(req, res) {
 });
 
 // Check if token is valid
-routerAuth.get('/', function(req, res) {
+routerAuth.get('/', function(req, res, next) {
+  if (!validateHeaders(req.headers)) {
+    return res
+      .status(403)
+      .send({message : missingHeader});
+  }
+
   var token = tokenUtil.decode(req.headers.token);
 
   // validate the token
   crud.findById(token.sub, function(err, user) {
     if (err) {
-      res.jsonp ({login: 'error ' + err});
+      return res.jsonp ({login: 'error ' + err});
     } else {
-      if (token.exp >= moment().unix()) {
-        res.jsonp ({logged : true});
-      } else {
-        res.jsonp ({logged : false});
+      if (token.exp <= moment().unix()) {
+        return res
+          .status(401)
+          .jsonp ({message : expired});
       }
     }
   });
   
+  // next();
 });
 
 // logout
