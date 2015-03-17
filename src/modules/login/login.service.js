@@ -4,7 +4,7 @@
 /**
  * Service for validation of user credentials
  */
-login.service('LoginService', function LoginService($state, $cookieStore, $q, $http) {
+login.service('LoginService', function LoginService($state, $q, $http) {
   var loginUrl = '/auth';
 
   /**
@@ -14,7 +14,6 @@ login.service('LoginService', function LoginService($state, $cookieStore, $q, $h
   this.login = function (credentials) {
     var that = this;
     // This return statement will be replace with a service.
-    // $cookieStore.put('session', 'parking user session');
     this.checkData(credentials)
       .then(
         function (data) {
@@ -46,7 +45,6 @@ login.service('LoginService', function LoginService($state, $cookieStore, $q, $h
     var didLogout = true;
     // This conditional will be replace with a service.
     if(didLogout) {
-      $cookieStore.remove('session');
       $state.go('home');
     } else {
       $log.error('The user doesn\'t wanna go...');

@@ -1,9 +1,7 @@
 // Login module
 'use strict';
 
-var login = angular.module('login.module', [
-    'ngCookies'
-  ]);
+var login = angular.module('login.module', []);
 
 login.config(function ($stateProvider) {
   $stateProvider
