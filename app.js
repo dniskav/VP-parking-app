@@ -9,6 +9,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var spots = require('./routes/spots');
 var auth = require('./routes/auth');
+var mdw = require('./middleware/mdw.js');
 
 
 var app = express();
@@ -28,9 +29,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/auth', auth);
+app.use('/API', mdw);
+app.use('/API/auth', auth);
 app.use('/users', users);
-app.use('/spots', spots);
+app.use('/API/spots', spots);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
