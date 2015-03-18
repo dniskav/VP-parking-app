@@ -4,7 +4,7 @@
 common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
   var factory = {},
     totalSlots = 10,
-    spotsUrl = '/spots',
+    spotsUrl = 'API/spots',
     availableSlots = 0;
 
   factory.spots = [];

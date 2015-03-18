@@ -15,14 +15,13 @@ login.controller('loginCtrl', function ($state, $scope, $auth) {
 
     $auth.login(user)
       .then(function () {
-        console.log('user logged!');
+        $state.go('home');
       })
       .catch(function (response) {
         console.log('log fail',response)
       })
     // if(status) {
     //   this.errors.login = false
-    //   // $state.go('home');
     // } else {
     //   this.errors.login = true
     // }
