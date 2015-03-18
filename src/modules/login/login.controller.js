@@ -1,7 +1,7 @@
 // Login controller
 'use strict';
 
-login.controller('loginCtrl', function ($state, $scope, $auth) {
+parking.controller('loginCtrl', function ($state, $scope, $auth) {
   this.user = {};
   this.methods = {};
   this.errors = {};

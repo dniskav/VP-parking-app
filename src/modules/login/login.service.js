@@ -4,7 +4,7 @@
 /**
  * Service for validation of user credentials
  */
-login.service('LoginService', function LoginService($state, $q, $http) {
+parking.service('LoginService', function LoginService($state, $q, $http) {
   var loginUrl = '/auth';
 
   /**
