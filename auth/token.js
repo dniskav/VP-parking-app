@@ -13,8 +13,10 @@ token.create = function (user, seconds) {
 
   return jwt.encode(payload, config.TOKEN_SECRET);
 }
+
 token.decode = function (user) {
-  return jwt.decode(user, config.TOKEN_SECRET);
+  var payload = user.split(' ')[1]; 
+  return jwt.decode(payload, config.TOKEN_SECRET);
 };
 
 module.exports = token; 
