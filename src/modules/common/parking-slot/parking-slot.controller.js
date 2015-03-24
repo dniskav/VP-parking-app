@@ -23,7 +23,7 @@ common.controller('parkingSlotCtrl', function (SlotsFactory, $log, $scope, ngDia
   };
   // Delete user
   $scope.delete = function(id){
-    var msg = 'This acction is unrecoverable, are you sure????';
+    var msg = 'This action is unrecoverable, are you sure????';
 
     if(confirm(msg)) {
       if(SlotsFactory.removeUser(id)) {
