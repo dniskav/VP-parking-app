@@ -1,7 +1,7 @@
 // Parking Slot Controller
 'use strict';
 
-common.controller('parkingSlotCtrl', function (SpotsService, SlotsFactory, $log, $scope, ngDialog) {
+common.controller('parkingSlotCtrl', function (SlotsFactory, $log, $scope, ngDialog) {
   // Will hold parking spots info
   this.spots = {},
   this.auth = true;

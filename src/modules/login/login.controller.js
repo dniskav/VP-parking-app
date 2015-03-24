@@ -1,7 +1,7 @@
 // Login controller
 'use strict';
 
-login.controller('loginCtrl', function ($state, LoginService) {
+parking.controller('loginCtrl', function ($state, $scope, $auth) {
   this.user = {};
   this.methods = {};
   this.errors = {};
@@ -11,11 +11,19 @@ login.controller('loginCtrl', function ($state, LoginService) {
    * Cta for user submitting the login form
    */
   this.methods.submit = angular.bind(this, function () {
-    if(LoginService.login()) {
-      this.errors.login = false
-      $state.go('home');
-    } else {
-      this.errors.login = true
-    }
+    var user = $scope.login.user;
+
+    $auth.login(user)
+      .then(function () {
+        $state.go('home');
+      })
+      .catch(function (response) {
+        console.log('log fail',response)
+      })
+    // if(status) {
+    //   this.errors.login = false
+    // } else {
+    //   this.errors.login = true
+    // }
   });
 });

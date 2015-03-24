@@ -1,9 +1,8 @@
 // nav controller
 'use strict';
 
-parking.controller('navCtrl', function (LoginService, $cookies) {
+parking.controller('navCtrl', function (LoginService) {
   this.methods = {};
-  this.$cookies = $cookies;
   this.LoginService = LoginService;
 
   /**

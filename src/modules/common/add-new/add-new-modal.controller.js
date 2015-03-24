@@ -12,7 +12,7 @@ common.controller('addNewModal', function ($scope, $log, $timeout, SlotsFactory,
 
   $scope.saveNew = function(update) {
     var user = $scope.editedUser;
-    console.info(user);
+
     if (update) {
       resp = SlotsFactory.editUser(editUsrId, user);
     } else {
