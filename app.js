@@ -11,7 +11,6 @@ var spots = require('./routes/spots');
 var auth = require('./routes/auth');
 var mdw = require('./middleware/mdw.js');
 
-
 var app = express();
 
 // view engine setup

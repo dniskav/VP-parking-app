@@ -1,10 +1,15 @@
 // Parking Slot Controller
 'use strict';
 
-common.controller('parkingSlotCtrl', function (SlotsFactory, $log, $scope, ngDialog) {
+common.controller('parkingSlotCtrl', function (socketFactory, SlotsFactory, $log, $scope, ngDialog) {
   // Will hold parking spots info
   this.spots = {},
   this.auth = true;
+
+  socketFactory.on('DC', function (data) {
+    SlotsFactory.drawSlots()
+    // console.log('data', data);
+  });  
 
   // Initialitation of SlotsFactory
   SlotsFactory.init();
@@ -23,7 +28,7 @@ common.controller('parkingSlotCtrl', function (SlotsFactory, $log, $scope, ngDia
   };
   // Delete user
   $scope.delete = function(id){
-    var msg = 'This acction is unrecoverable, are you sure????';
+    var msg = 'This action is unrecoverable, are you sure????';
 
     if(confirm(msg)) {
       if(SlotsFactory.removeUser(id)) {

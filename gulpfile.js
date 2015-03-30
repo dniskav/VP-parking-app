@@ -7,7 +7,6 @@ var src = './src',
   concat = require('gulp-concat'),
   sourcemaps = require('gulp-sourcemaps'),
   uglify = require('gulp-uglify'),
-  serve = require('./app'),
   annotate = require('gulp-ng-annotate'),
   express = require('express'),
   file = require('file'),
@@ -16,14 +15,12 @@ var src = './src',
   minifyCSS = require('gulp-minify-css'),
   app = express(),
   livereload = require('gulp-livereload'),
-  port = 3000,
   tasks;
 
 tasks = {
   server: {
     start: function () {
-      app.use(serve);
-      app.listen(port);
+      require('./server');
     }
   },
   watch: function () {
