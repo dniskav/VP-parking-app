@@ -7,20 +7,20 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
-
 var server = http.createServer(app);
 var io = require('socket.io')(server);
+
+io.on('connection', ioConnection);
+
+function ioConnection(socket) {
+  global.socket = socket;
+  global.sockets = io.sockets;
+};
 
 server.listen(port);
 
 server.on('error', onError);
 server.on('listening', onListening);
-
-io.on('connection', ioConnection);
-
-function ioConnection(socket) {
-  console.log('a user connected');
-}
 
 function onError(error) {
 

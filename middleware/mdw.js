@@ -15,7 +15,6 @@ var validateHeaders = function (headers) {
   return false;
 }
 
-
 app.use(function (req, res, next) {
   if(req.url == '/auth' && req.method == 'POST') {
     next();
@@ -24,9 +23,11 @@ app.use(function (req, res, next) {
       return res
         .status(403)
         .send({message : missingHeader});
-    }
+    };
+
 
     var token;
+    
     try {
       token = tokenUtil.decode(req.headers.authorization)
     } catch (err) {
@@ -44,6 +45,10 @@ app.use(function (req, res, next) {
             .status(401)
             .jsonp ({message : expired});
       } else {
+        // use the socket if the method is POST or PUT
+        if (req.method == 'POST' || req.method == 'PUT') {
+          sockets.emit ('DC', {dataUpdated : true});
+        };
         next();
       }
     });

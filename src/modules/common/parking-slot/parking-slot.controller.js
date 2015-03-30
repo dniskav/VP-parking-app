@@ -1,10 +1,15 @@
 // Parking Slot Controller
 'use strict';
 
-common.controller('parkingSlotCtrl', function (SlotsFactory, $log, $scope, ngDialog) {
+common.controller('parkingSlotCtrl', function (socketFactory, SlotsFactory, $log, $scope, ngDialog) {
   // Will hold parking spots info
   this.spots = {},
   this.auth = true;
+
+  socketFactory.on('DC', function (data) {
+    SlotsFactory.drawSlots()
+    // console.log('data', data);
+  });  
 
   // Initialitation of SlotsFactory
   SlotsFactory.init();
