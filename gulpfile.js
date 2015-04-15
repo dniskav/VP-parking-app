@@ -40,7 +40,7 @@ tasks = {
           .pipe(sourcemaps.init())
           .pipe(concat('all.min.js'))
           .pipe(annotate({single_quotes: true}))
-          .pipe(uglify())
+          // .pipe(uglify())
           .pipe(sourcemaps.write())
           .pipe(gulp.dest(dist + '/javascripts/'))
           .pipe(livereload());

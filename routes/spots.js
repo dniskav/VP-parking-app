@@ -117,7 +117,7 @@ router.put('/:id', function (req, res) {
       user.visible = (typeof data.visible != 'undefined')? data.visible : user.visible,
       user.email = data.email || user.email,
       user.pwd = data.pwd || user.pwd,
-      user.role = data.role || 15;
+      user.role = (typeof data.role == 'undefined')? 15 : data.role;
 
       user.save(function (err) {
         if (err) return res.status(status).send(500, err.message);

@@ -5,7 +5,7 @@ common.controller('addNewCtrl', function ($scope, $log, ngDialog, SlotsFactory){
 
   $scope.addNew = function() {
     ngDialog.open({ 
-      template: 'views/common/new-vehicle-modal.html',
+      template: 'views/common/new-vehicle/new-vehicle-modal.html',
       className: 'modal-container',
       controller: 'addNewModal' 
     });

@@ -52,6 +52,7 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
         }),
           function(err) {
             alert('save fail!!!'); 
+            factory.drawSlots();
           }
         );
     } ;   
@@ -82,15 +83,6 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
 
   factory.createUser = function (user) {
 
-    // if (typeof factory.searchPlate(user.plate) === 'object') return;
-    
-    // var newUser = {
-    //   active: false,
-    //   type: user.type.toLowerCase(),
-    //   plate: factory.normalizePlate(user.plate),
-    //   name: user.name
-    // };
-
     factory.setData(user)
       .then(
         function (data) {
@@ -103,15 +95,6 @@ common.factory('SlotsFactory', function ($http, $q, $log, $timeout) {
   };
 
   factory.editUser = function (user, data) {
-
-    // if (typeof factory.searchPlate(user.plate) === 'object') return;
-    
-    // var newUser = {
-    //   active: false,
-    //   type: user.type.toLowerCase(),
-    //   plate: factory.normalizePlate(user.plate),
-    //   name: user.name
-    // };
 
     factory.editData(user, data)
       .then(
