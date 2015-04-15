@@ -46,8 +46,8 @@ app.use(function (req, res, next) {
             .status(401)
             .jsonp ({message : expired});
       } else {
-        // use the socket if the method is POST or PUT
-        if ((req.method == 'POST' || req.method == 'PUT')) {
+        // use the socket if the method is POST, PUT or delete
+        if ((req.method == 'POST' || req.method == 'PUT' || req.method == 'DELETE')) {
           if (user.role > 0) {
             return res
               .status(401)
