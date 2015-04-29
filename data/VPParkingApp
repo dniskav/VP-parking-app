@@ -5,3 +5,4 @@
 { "__v" : 0, "_id" : { "$oid" : "552e7c2ecd5ec1d1305c4f9f" }, "active" : true, "email" : "mmayers@helo.wen", "name" : "Michale Myers", "plate" : "2l4s3r", "pwd" : "666", "role" : 15, "type" : "bike", "visible" : true }
 { "name" : "er", "plate" : "Y", "type" : "car", "email" : "r@r", "pwd" : "y", "role" : 15, "_id" : { "$oid" : "552eaf3f15f460a547027fca" }, "__v" : 0 }
 { "name" : "Daniel Silva", "plate" : "qly59d", "type" : "bike", "email" : "d@s.c", "pwd" : "d", "role" : 15, "active" : true, "visible" : true, "_id" : { "$oid" : "552eb10036d0c0a759af8854" }, "__v" : 0 }
+
