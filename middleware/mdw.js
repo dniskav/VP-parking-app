@@ -7,6 +7,7 @@ var tokenUtil = require('../auth/token');
 var validUntil = 1200;
 var expired = 'token expired';
 var missingHeader = 'Missing headers';
+var unauth = "Unauthorized";
 
 var validateHeaders = function (headers) {
   if(headers.authorization) {
@@ -45,9 +46,15 @@ app.use(function (req, res, next) {
             .status(401)
             .jsonp ({message : expired});
       } else {
-        // use the socket if the method is POST or PUT
-        if (req.method == 'POST' || req.method == 'PUT') {
-          sockets.emit ('DC', {dataUpdated : true});
+        // use the socket if the method is POST, PUT or delete
+        if ((req.method == 'POST' || req.method == 'PUT' || req.method == 'DELETE')) {
+          if (user.role > 0) {
+            return res
+              .status(401)
+              .jsonp ({message : unauth});            
+          } else {
+            sockets.emit ('DC', {dataUpdated : true});
+          }
         };
         next();
       }

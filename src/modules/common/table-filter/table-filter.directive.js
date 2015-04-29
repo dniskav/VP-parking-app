@@ -4,7 +4,7 @@
 common.directive('tableFilter', function () {
   return{
     restrict: 'E',
-    templateUrl: 'views/common/table-filter.html',
+    templateUrl: 'views/common/table-filter/table-filter.html',
     controller: 'tableFilterCtrl',
     controllerAs: 'filter',
     replace: true

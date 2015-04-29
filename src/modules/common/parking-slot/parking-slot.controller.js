@@ -46,7 +46,7 @@ common.controller('parkingSlotCtrl', function (socketFactory, SlotsFactory, $log
     if(usr.position != '') {
       // launch the modal window
       ngDialog.open({ 
-        template: 'views/common/new-vehicle-modal.html',
+        template: 'views/common/new-vehicle/new-vehicle-modal.html',
         className: 'modal-container',
         controller: 'addNewModal',
         scope: $scope  
