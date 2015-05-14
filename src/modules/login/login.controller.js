@@ -14,7 +14,8 @@ parking.controller('loginCtrl', function ($state, $scope, $auth) {
     var user = $scope.login.user;
 
     $auth.login(user)
-      .then(function () {
+      .then(function (data) {
+        console.log(data);
         $state.go('home');
       })
       .catch(function (response) {
