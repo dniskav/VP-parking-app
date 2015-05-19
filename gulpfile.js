@@ -15,6 +15,7 @@ var src = './src',
   minifyCSS = require('gulp-minify-css'),
   app = express(),
   livereload = require('gulp-livereload'),
+  shell = require('gulp-shell'),
   tasks;
 
 tasks = {
