@@ -48,7 +48,7 @@ app.use(function (req, res, next) {
       } else {
         // use the socket if the method is POST, PUT or delete
         if ((req.method == 'POST' || req.method == 'PUT' || req.method == 'DELETE')) {
-          if (user.role > 0) {
+          if (user.role > 1) {
             return res
               .status(401)
               .jsonp ({message : unauth});            
